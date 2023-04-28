@@ -10,11 +10,23 @@ var _testCase = []struct {
 	out string
 }{
 	{in: 1, out: "1"},
+	{in: 11157, out: "2TX"},
+}
+
+func TestGenTable(t *testing.T) {
+	genTable()
+
+	for i, v := range _table {
+		fmt.Printf("'%c',", v)
+		if i == 30 {
+			fmt.Println()
+		}
+	}
 }
 
 func TestEncode(t *testing.T) {
 	for i, v := range _testCase {
-		code, err := encode(v.in)
+		code, err := Encode(v.in)
 		if err != nil || code != v.out {
 			fmt.Printf("[%d].in:%d,expect:%s,got:%s", i, v.in, v.out, code)
 			t.Error(err)
