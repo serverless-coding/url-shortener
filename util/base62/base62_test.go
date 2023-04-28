@@ -11,6 +11,11 @@ var _testCase = []struct {
 }{
 	{in: 1, out: "1"},
 	{in: 11157, out: "2TX"},
+	{in: 62, out: "10"},
+	{in: 61, out: "Z"},
+	{in: 63, out: "11"},
+	{in: 11158, out: "2TY"},
+	{in: 11159, out: "2TZ"},
 }
 
 func TestGenTable(t *testing.T) {
