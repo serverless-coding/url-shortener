@@ -60,7 +60,6 @@ func init() {
 	})
 
 	engine = r
-	go engine.Run()
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {

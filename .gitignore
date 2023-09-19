@@ -22,3 +22,4 @@ go.work
 
 .env
 .vercel
+node_modules
