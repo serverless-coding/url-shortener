@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# url-shortener
 
-## Getting Started
+using serverless framework and aws lambda to implement url shortener
 
-First, run the development server:
+## use case
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun run dev
-```
+- URL shortening: given a long URL => return a much shorter URL
+- URL redirecting: given a shorter URL => redirect to the original URL
+- High availability, scalability, and fault tolerance considerations
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Back of the envelope estimation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Write operation: 100 million URLs are generated per day.
+- Write operation per second: 100 million / 24 /3600 = 1160
+- Read operation: Assuming ratio of read operation to write operation is 10:1, read operation per second: 1160 * 10 = 11,600
+- Assuming the URL shortener service will run for 10 years, this means we must support 100 million * 365= 36.5 billion records.
+- Assume average URL length is 100.
+- Storage requirement over 10 years: 365 billion *100 bytes* 10 years = 365 TB
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## design
 
-## Learn More
+### hash
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Base 62 conversion
