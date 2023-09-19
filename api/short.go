@@ -60,9 +60,10 @@ func init() {
 	})
 
 	engine = r
+	go engine.Run()
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	go engine.Run()
+
 	engine.ServeHTTP(w, r)
 }
