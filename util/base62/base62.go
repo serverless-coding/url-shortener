@@ -2,14 +2,63 @@ package base62
 
 import (
 	"errors"
+	"math"
 	"strings"
+	"sync"
 )
 
-// base 62 characters
-var _table = [62]rune{
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+const (
+	_base   = 62
+	_maxLen = 15
+)
+
+// base 62 characters 62^6=>560亿 11位
+var (
+	_table = [_base]rune{
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+
+	power = [_maxLen]int64{
+		int64(math.Pow(62, 0)),
+		int64(math.Pow(62, 1)),
+		int64(math.Pow(62, 2)),
+		int64(math.Pow(62, 3)),
+		int64(math.Pow(62, 4)),
+		int64(math.Pow(62, 5)),
+		int64(math.Pow(62, 6)),
+		int64(math.Pow(62, 7)),
+		int64(math.Pow(62, 8)),
+		int64(math.Pow(62, 9)),
+		int64(math.Pow(62, 10)),
+		int64(math.Pow(62, 11)),
+		int64(math.Pow(62, 12)),
+		int64(math.Pow(62, 13)),
+		int64(math.Pow(62, 14)),
+	}
+	_mTable map[rune]int = nil
+	_mu                  = sync.Mutex{}
+)
+
+func Decode(uId string) (int64, error) {
+	if _mTable == nil {
+		_mu.Lock()
+		defer _mu.Unlock()
+		if _mTable == nil {
+			_mTable = make(map[rune]int, 62)
+			for i, v := range _table {
+				_mTable[v] = i
+				// fmt.Printf("%c:%d\n", v, i)
+			}
+		}
+	}
+
+	res, n := int64(0), len(uId)
+	for i, v := range uId {
+		res += int64(_mTable[v]) * power[n-1-i]
+	}
+	return res, nil
+}
 
 /*
 0-0, ..., 9-9,
