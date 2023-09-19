@@ -61,6 +61,17 @@ func init() {
 		ctx.JSON(200, "not found")
 	})
 
+	g.GET("/url/redirect", func(ctx *gin.Context) {
+		short := ctx.Query("url")
+		if short != "" {
+			long, _ := service.NewUrlShortener().UrlFromShort(short)
+
+			ctx.Redirect(http.StatusTemporaryRedirect, long)
+			return
+		}
+		ctx.JSON(200, "not found")
+	})
+
 	engine = r
 }
 
