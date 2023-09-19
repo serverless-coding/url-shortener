@@ -6,6 +6,10 @@
         {
             "src": "/api/*",
             "dest": "/api/short.go"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/web"
         }
     ]
 }
