@@ -9,10 +9,16 @@ import (
 	"github.com/serverless-coding/url-shortener/service"
 )
 
+type ShortUrl struct {
+	Url    string `json:"url,omitempty" description:"原始"`
+	Short  string `json:"short,omitempty" description:"短链"`
+	Target string `json:"target,omitempty" description:"目标"`
+}
+
 type ShortUrlRes struct {
-	Code    int    `json:"code,omitempty" description:"code"`
-	Message string `json:"message,omitempty" description:"message"`
-	Data    string `json:"data" description:"断链"`
+	Code    int      `json:"code,omitempty" description:"code"`
+	Message string   `json:"message,omitempty" description:"message"`
+	Data    ShortUrl `json:"data" description:"结果"`
 }
 
 // func ShortUrl(w http.ResponseWriter, r *http.Request) {
@@ -35,13 +41,17 @@ func init() {
 	r := gin.Default()
 
 	r.GET("/api/short", func(c *gin.Context) {
-		res := ShortUrlRes{}
+		res := ShortUrlRes{
+			Code: 200,
+		}
 		if c.Query("url") != "" {
 			short, err := service.NewUrlShortener().Short(c.Query("url"))
 			if err != nil {
 				fmt.Println(err)
 			}
-			res.Data = c.Request.Host + "/api/url/" + short
+			res.Data.Target = c.Request.Host + "/api/url?url=" + short
+			res.Data.Short = short
+			res.Data.Url = c.Query("url")
 		}
 
 		c.JSON(http.StatusOK, res)
@@ -54,7 +64,7 @@ func init() {
 				ctx.AbortWithError(400, err)
 				return
 			}
-			ctx.Redirect(301, long)
+			ctx.Redirect(302, long)
 		}
 		ctx.AbortWithError(400, errors.New("url required"))
 	})
