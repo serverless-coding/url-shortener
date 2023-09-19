@@ -29,7 +29,7 @@ type ShortUrlRes struct {
 // 	fmt.Fprint(w, string(jv))
 // }
 
-func main() {
+func Short() {
 	r := gin.Default()
 
 	r.GET("/api/short", func(c *gin.Context) {
