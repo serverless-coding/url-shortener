@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/gin-gonic/gin v1.9.1
 	github.com/pkg/errors v0.9.1
 	github.com/zeromicro/go-zero v1.5.5
 	gopkg.in/ini.v1 v1.67.0
@@ -19,7 +20,6 @@ require (
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.9.1 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
