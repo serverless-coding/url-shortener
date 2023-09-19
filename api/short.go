@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
 	"github.com/serverless-coding/url-shortener/service"
 )
 
@@ -46,11 +45,7 @@ func init() {
 	g.GET("/url", func(ctx *gin.Context) {
 		short := ctx.Query("url")
 		if short != "" {
-			long, err := service.NewUrlShortener().UrlFromShort(short)
-			if err != nil {
-				ctx.AbortWithError(400, err)
-				return
-			}
+			long, _ := service.NewUrlShortener().UrlFromShort(short)
 			res := ShortUrlRes{
 				Code:    200,
 				Message: "success",
@@ -63,7 +58,7 @@ func init() {
 			ctx.JSON(200, res)
 			return
 		}
-		ctx.AbortWithError(400, errors.New("url required"))
+		ctx.JSON(200, "not found")
 	})
 
 	engine = r
