@@ -21,26 +21,12 @@ type ShortUrlRes struct {
 	Data    ShortUrl `json:"data" description:"结果"`
 }
 
-// func ShortUrl(w http.ResponseWriter, r *http.Request) {
-// 	res := ShortUrlRes{}
-// 	if r.URL.Query().Has("url") {
-// 		short, err := service.NewUrlShortener().Short(r.URL.Query().Get("url"))
-// 		if err != nil {
-// 			fmt.Println(err)
-// 		}
-// 		res.Data = r.Host + "/short/" + short
-// 	}
-
-// 	jv, _ := json.Marshal(res)
-// 	fmt.Fprint(w, string(jv))
-// }
-
 var engine *gin.Engine
 
 func init() {
-	r := gin.Default()
-
-	r.GET("/api/short", func(c *gin.Context) {
+	r := gin.New()
+	g := r.Group("/api")
+	g.GET("/short", func(c *gin.Context) {
 		res := ShortUrlRes{
 			Code: 200,
 		}
@@ -57,14 +43,25 @@ func init() {
 		c.JSON(http.StatusOK, res)
 	})
 
-	r.GET("/api/url", func(ctx *gin.Context) {
-		if ctx.Query("url") != "" {
-			long, err := service.NewUrlShortener().UrlFromShort(ctx.Query("url"))
+	g.GET("/url", func(ctx *gin.Context) {
+		short := ctx.Query("url")
+		if short != "" {
+			long, err := service.NewUrlShortener().UrlFromShort(short)
 			if err != nil {
 				ctx.AbortWithError(400, err)
 				return
 			}
-			ctx.Redirect(302, long)
+			res := ShortUrlRes{
+				Code:    200,
+				Message: "success",
+				Data: ShortUrl{
+					Short:  short,
+					Url:    long,
+					Target: long,
+				},
+			}
+			ctx.JSON(200, res)
+			return
 		}
 		ctx.AbortWithError(400, errors.New("url required"))
 	})
