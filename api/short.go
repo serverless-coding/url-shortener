@@ -29,7 +29,9 @@ type ShortUrlRes struct {
 // 	fmt.Fprint(w, string(jv))
 // }
 
-func Short() {
+var engine *gin.Engine
+
+func init() {
 	r := gin.Default()
 
 	r.GET("/api/short", func(c *gin.Context) {
@@ -57,5 +59,9 @@ func Short() {
 		ctx.AbortWithError(400, errors.New("url required"))
 	})
 
-	r.Run()
+	engine = r
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	engine.ServeHTTP(w, r)
 }

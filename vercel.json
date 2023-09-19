@@ -1,6 +1,8 @@
 {
-    "env": {
-        "GO_BUILD_FLAGS": "-ldflags '-s -w'"
+    "build": {
+        "env": {
+            "GO_BUILD_FLAGS": "-ldflags '-s -w'"
+        }
     },
     "routes": [
         {
