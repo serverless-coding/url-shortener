@@ -64,4 +64,5 @@ func init() {
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	engine.ServeHTTP(w, r)
+	engine.Run()
 }
