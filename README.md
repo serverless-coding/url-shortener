@@ -22,3 +22,20 @@ using serverless framework and aws lambda to implement url shortener
 ### hash
 
 ### Base 62 conversion
+
+## web/page
+
+### pnpm
+
+[pnpm node version,与node版本的兼容性](https://pnpm.io/installation#compatibility)
+
+切换版本:
+npm i pnpm@7.3.0 -g
+
+npm i pnpm@8.3.0 -g
+
+### nvm
+
+https://github.com/jorgebucaran/nvm.fish
+
+https://github.programnotes.cn/nvm-sh/nvm
