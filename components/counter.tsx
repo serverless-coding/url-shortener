@@ -28,7 +28,7 @@ export default function Counter() {
             then((res) => res.json()).
             then((data) => {
                 let v: GetShortUrl = data as GetShortUrl
-                setShortUrl("short:" + v.data.short)
+                setShortUrl(v.data.short)
                 setTarget(v.data.target)
                 return
             }).
@@ -41,7 +41,7 @@ export default function Counter() {
             then((res) => res.json()).
             then((data) => {
                 let v: GetShortUrl = data as GetShortUrl
-                setShortUrl("short:  " + v.data.short)
+                setShortUrl("")
                 setTarget(v.data.target)
                 return
             }).
