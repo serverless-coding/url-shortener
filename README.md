@@ -39,3 +39,27 @@ npm i pnpm@8.3.0 -g
 https://github.com/jorgebucaran/nvm.fish
 
 https://github.programnotes.cn/nvm-sh/nvm
+
+
+### config
+
+```json
+//    "src": "/(.*)",
+//    "dest": "/$1" 必須有$1,否則樣式不對 且控制台報錯: Uncaught SyntaxError: Unexpected token <
+"routes": [
+    {
+        "src": "/_next/(.*)",
+        "dest": "/_next/$1"
+    },
+    {
+        "src": "/api/(.*)",
+        "dest": "/api/short.go"
+    },
+    {
+        "src": "/(.*)",
+        "dest": "/$1"
+    }
+]
+```
+
+https://github.com/vercel/next.js/issues/7469
