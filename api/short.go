@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/serverless-coding/url-shortener/service"
@@ -34,7 +35,12 @@ func init() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			res.Data.Target = c.Request.Host + "/api/url?url=" + short
+			schema := "https://"
+			if c.Request.Host == "" || strings.Contains(c.Request.Host, "localhost") || strings.Contains(c.Request.Host, "127.0.0.1") {
+				schema = "http://"
+			}
+			res.Data.Target = schema +
+				c.Request.Host + "/api/url/redirect?short=" + short
 			res.Data.Short = short
 			res.Data.Url = c.Query("url")
 		}
@@ -43,7 +49,7 @@ func init() {
 	})
 
 	g.GET("/url", func(ctx *gin.Context) {
-		short := ctx.Query("url")
+		short := ctx.Query("short")
 		if short != "" {
 			long, _ := service.NewUrlShortener().UrlFromShort(short)
 			res := ShortUrlRes{
@@ -62,7 +68,7 @@ func init() {
 	})
 
 	g.GET("/url/redirect", func(ctx *gin.Context) {
-		short := ctx.Query("url")
+		short := ctx.Query("short")
 		if short != "" {
 			long, _ := service.NewUrlShortener().UrlFromShort(short)
 
