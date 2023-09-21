@@ -24,7 +24,7 @@ export default function Counter() {
         setText(event.target.value)
     }
     const handleShort = () => {
-        fetch("/api/url?url=" + text).
+        fetch("/api/url?short=" + text).
             then((res) => res.json()).
             then((data) => {
                 let v: GetShortUrl = data as GetShortUrl
